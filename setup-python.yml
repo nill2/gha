@@ -1,0 +1,32 @@
+# File: .github/workflows/setup-python.yml
+name: Setup Python Environment
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+  workflow_dispatch:
+
+jobs:
+  setup-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Miniconda and update dependencies
+        run: |
+          wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          source "$HOME/miniconda/etc/profile.d/conda.sh"
+          conda activate base
+          conda config --set always_yes yes --set changeps1 no
+          conda update -q conda
+          conda env update --file environment.yml --name base
+        env:
+          CONDA_HOME: $HOME/miniconda
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
