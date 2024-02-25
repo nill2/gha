@@ -1,0 +1,80 @@
+name: 'Run tests'
+description: 'Run unit and e2e tests'
+
+inputs:
+  IS_TEST:
+    description: 'Describese the mode of tests'
+    required: false
+    default: 'GHA'
+
+  MONGO_HOST:
+    description: 'Mongo host'
+    required: false
+    default: 'localhost'
+
+  MONGO_PORT:
+    description: 'Mongo port'
+    required: false
+    default: '27017'
+    
+
+  FTP_USER:
+    description: 'FTP user'
+    required: false
+    default: 'user'
+
+  FTP_PASSWORD: 
+    description: 'FTP password'
+    required: false
+    default: 'password'
+    
+  AWS_SECRET_KEY:
+    description: 'AWS secret key'
+    required: true
+  
+  AWS_ACCESS_KEY:
+    description: 'AWS access key'
+    required: true
+
+  UNIT_TEST:
+    description: 'run unit tests'
+    required: false
+    default: 'No'
+  
+  E2E_TEST:
+    description: 'run e2e tests'
+    required: false
+    default: 'No'
+
+runs:
+  using: "composite"
+  steps:
+    - name: unit test
+      shell: bash
+      if: ${{ inputs.UNIT_TEST != 'No' }}
+      run: |
+        pytest  './tests/test_unit.py'
+      env:
+        IS_TEST: ${{ inputs.IS_TEST }}
+        MONGO_HOST: ${{ inputs.MONGO_HOST }}
+        MONGO_PORT: ${{ inputs.MONGO_PORT }}
+        FTP_USER: ${{ inputs.FTP_USER }}
+        FTP_PASSWORD: ${{ inputs.FTP_PASSWORD }}
+        AWS_SECRET_KEY: ${{ inputs.AWS_SECRET_KEY }}
+        AWS_ACCESS_KEY: ${{ inputs.AWS_ACCESS_KEY }}
+
+    - name: e2e test
+      shell: bash
+      if: ${{ inputs.E2E_TEST != 'No' }}
+      run: |
+        pytest  './tests/test_core.py'
+      env:
+        IS_TEST: ${{ inputs.IS_TEST }}
+        MONGO_HOST: ${{ inputs.MONGO_HOST }}
+        MONGO_PORT: ${{ inputs.MONGO_PORT }}
+        FTP_USER: ${{ inputs.FTP_USER }}
+        FTP_PASSWORD: ${{ inputs.FTP_PASSWORD }}
+        AWS_SECRET_KEY: ${{ inputs.AWS_SECRET_KEY }}
+        AWS_ACCESS_KEY: ${{ inputs.AWS_ACCESS_KEY }}
+
+
