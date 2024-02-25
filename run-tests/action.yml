@@ -12,12 +12,6 @@ inputs:
     required: false
     default: 'localhost'
 
-  MONGO_PORT:
-    description: 'Mongo port'
-    required: false
-    default: '27017'
-    
-
   FTP_USER:
     description: 'FTP user'
     required: false
