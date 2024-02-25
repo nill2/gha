@@ -1,25 +1,17 @@
 # File: .github/workflows/install-packages.yml
-name: Install Python Packages
+name: 'Install Python Packages'
+description: 'Install Python Packages'
 
-on:
-  push:
-    branches:
-      - '**'
-      - '!main'
-  workflow_dispatch:
-
-jobs:
-  install-packages:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
+runs:
+  using: "composite"
+  steps:
       - name: Add conda to system path
+        shell: bash
         run: |
           echo $CONDA/bin >> $GITHUB_PATH
 
       - name: Install tools from PyPI
+        shell: bash
         run: |
           pip install pylint
           pip install flask
